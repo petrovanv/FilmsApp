@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model Films.Models.FilmsViewModel
+
+<h2>Films</h2>
+
+@Html.ActionLink("Add film", "AddFilm")
+
+<table class="table">
+    <tr>
+        @if (Model.Films.Count > 0)
+        {
+            <th>
+                @Html.Label("Name")
+            </th>
+            <th>
+
+            </th>
+            <th>
+                @Html.Label("Year")
+            </th>
+            <th>
+                @Html.Label("Producer")
+            </th>
+            <th></th>
+
+        }
+    </tr>
+    <tbody>
+
+        @foreach (var film in Model.Films)
+        {
+            <tr>
+                <td>
+                    @film.Name
+                </td>
+                <td>
+                    @if (film.Poster != null)
+                    {
+                        <img src="data:image/jpg;base64,@Convert.ToBase64String(film.Poster)" style="width:100px" />
+                    }
+                </td>
+                <td>
+                    @film.Year
+                </td>
+                <td>
+                    @film.Producer
+                </td>
+                <td>
+                    @Html.ActionLink("View", "ViewFilm", new { id = film.Id }, new { @class = "btn btn-xs btn-default" })
+
+                    @if (film.Creator == Guid.Parse(ViewData["CurrentUser"].ToString()))
+                    {
+                        @Html.ActionLink("Edit", "EditFilm", new { id = film.Id }, new { @class = "btn btn-xs btn-info" })
+                    }
+
+                    @Html.ActionLink("Delete", "DeleteFilm", new { id = film.Id }, new { @class = "btn btn-xs btn-danger", onclick = "return confirm('Are you sure you wish to delete this film?');" })
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
